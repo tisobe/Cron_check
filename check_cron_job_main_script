@@ -8,3 +8,4 @@ setenv PFILES "${PDIRS}"
 
 perl /data/mta/MTA/bin/check_cron_job_error.perl 
 
+rm -rf param

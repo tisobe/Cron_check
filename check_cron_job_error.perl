@@ -11,12 +11,36 @@
 #################################################################################################################
 
 #
+#--- main direcotry setting
+
+$main_dir = '/data/mta/Script/Cron_check/';
+
+#
 #--- set email address
 #
 
-$tester = 'isobe@head.cfa.harvard.edu';
-#$others = 'swolk@head.cfa.harvard.edu brad@head.cfa.harvard.edu';
-$others = '';
+$tester = $ARGV[0];	#--- if tester is given, it is a test mode, and will run as a test mode.
+chomp $tester;
+
+if($tester eq ''){
+	$tester = 'isobe@head.cfa.harvard.edu';
+#	$others = 'swolk@head.cfa.harvard.edu brad@head.cfa.harvard.edu';
+	$others = '';
+
+	$test_mode = 0;
+}else{
+	$others = '';
+
+	$test_mode = 1;
+
+	$input = `ls $main_dir/*`;
+	if($input =~ /Test_out/){
+		# do nothing
+	}else{
+		system("mkdir $main_dir/Test_out");
+	} 
+}
+
 
 #
 #--- find a user name
@@ -393,9 +417,15 @@ if($ecnt == 0 && $wcnt == 0){
 	}
 	
 	system("cat $out_file | mailx -s\"Subject: Cron Errors --- $user on $machine\n\" -rcus\@head.cfa.harvard.edu $tester $others");
-	system("mv $out_file /data/mta/Script/Cron_check/Error_logs/");
-	system("chmod 775 /data/mta/Script/Cron_check/Error_logs/$out_file");
-	system("chgrp mtagroup  /data/mta/Script/Cron_check/Error_logs/$out_file");
+	if($test_mode == 1){
+		system("mv $out_file    $main_dir/Test_out/");
+		system("chmod 775       $main_dir/Test_out/$out_file");
+		system("chgrp mtagroup  $main_dir/Test_out/$out_file");
+	}else{
+		system("mv $out_file    $main_dir/Error_logs/");
+		system("chmod 775       $main_dir/Error_logs/$out_file");
+		system("chgrp mtagroup  $main_dir/Cron_check/Error_logs/$out_file");
+	}
 }
 
 

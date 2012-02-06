@@ -51,6 +51,16 @@ Format: cron_warning_<user>_<machine>_<year><ydate>
 If there is no error/warning, this log will not be created.
 
 
+Test Mode
+---------
+If you run the script with an argument of email address, the script will run on a test mode.
+It will send out email notification to the email address and the file will be saved in
+/data/mta/Script/Cron_check/Test_out. The directory Test_out will be created, if it does not exist.
+Example:
+
+perl /data/mta/MTA/bin/check_cron_job_error.perl  tisobe@cfa.harvard.edu
+
+
 Cron jobs
 ---------
 mta on colossus:
