@@ -1,0 +1,52 @@
+####################################
+Checking Error Status of Cron Jobs
+####################################
+
+
+check_cron_job_wrap_script
+--------------------------
+call check_cron_job_main_script in tsh environment
+
+check_cron_job_main_script
+--------------------------
+set the environment and run check_cron_job_error.perl
+
+
+check_cron_job_error.perl
+-------------------------
+This script reads cron job entries and check whether the cron jobs are running as it is supposed to be
+and, if it does, check whether there are any error messages. If it finds these problems, it creates
+a log and sends out email.
+
+
+This script must be run on a specific machine with a specific user. Currently following jobs are run:
+
+	mta on rhodes
+	mta on colossus
+	cus on rhodes
+
+
+Usage:
+------
+With an appropriate user on an appropriate machine:
+
+	/data/mta/MTA/bin/check_cron_job_warap_script
+
+Input:
+-----
+The script will read cron job lists and log files.
+Since it is too long and there will be a mixed message, if a log file is created with ">>", 
+that cron job is ignored from checking the error. 
+
+Output:
+-------
+email to $tester and other people listed.
+Logs under /data/mta/Script/Cron_check/Error_logs/
+Example:
+	-rwxrwxr-x   1 10139    mtagroup     357 Feb  6 09:47 cron_warning_cus_rhodes_2012037
+	-rwxrwxr-x   1 mta      mtagroup    1706 Feb  6 11:17 cron_warning_mta_rhodes_2012037
+
+Format: cron_warning_<user>_<machine>_<year><ydate>
+
+If there is no error/warning, this log will not be created.
+
