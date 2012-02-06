@@ -50,3 +50,15 @@ Format: cron_warning_<user>_<machine>_<year><ydate>
 
 If there is no error/warning, this log will not be created.
 
+
+Cron jobs
+---------
+mta on colossus:
+0 5 * * * cd /data/mta/Script/Cron_check/Exc; /data/mta/MTA/bin/check_cron_job_wrap_script > $HOME/Logs/cron_check_mta_colossus 2>&1
+
+cus on rhodes:
+5 5 * * * cd /data/mta/Script/Cron_check/Exc; /data/mta/MTA/bin/check_cron_job_wrap_script > $HOME/Logs/cron_check_cus_rhodes 2>&1
+
+mta on rhodes:
+10 5 * * * cd /data/mta/Script/Cron_check/Exc; /data/mta/MTA/bin/check_cron_job_wrap_script > $HOME/Logs/cron_check_cus_rhodes 2>&1
+

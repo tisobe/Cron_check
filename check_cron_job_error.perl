@@ -11,6 +11,14 @@
 #################################################################################################################
 
 #
+#--- set email address
+#
+
+$tester = 'isobe@head.cfa.harvard.edu';
+#$others = 'swolk@head.cfa.harvard.edu brad@head.cfa.harvard.edu';
+$others = '';
+
+#
 #--- find a user name
 #
 
@@ -341,7 +349,7 @@ if($ecnt == 0 && $wcnt == 0){
 	open(OUT, "> $zout");
 	print OUT "No Cron Error Today for $user on $machine.\n";
 	close(OUT);
-	system("cat ./$zout | mailx -s\"No Cron Error Today:  $user on $machine\n\" -rcus\@head.cfa.harvard.edu isobe\@head.cfa.harvard.edu");
+	system("cat ./$zout | mailx -s\"No Cron Error Today:  $user on $machine\n\" -rcus\@head.cfa.harvard.edu $tester");
 	system("rm $zout");
 
 }else{
@@ -384,7 +392,7 @@ if($ecnt == 0 && $wcnt == 0){
 		system("cat $zerror >> $out_file");
 	}
 	
-	system("cat $out_file | mailx -s\"Subject: Cron Errors --- $user on $machine\n\" -rcus\@head.cfa.harvard.edu isobe\@head.cfa.harvard.edu");
+	system("cat $out_file | mailx -s\"Subject: Cron Errors --- $user on $machine\n\" -rcus\@head.cfa.harvard.edu $tester $others");
 	system("mv $out_file /data/mta/Script/Cron_check/Error_logs/");
 	system("chmod 775 /data/mta/Script/Cron_check/Error_logs/$out_file");
 	system("chgrp mtagroup  /data/mta/Script/Cron_check/Error_logs/$out_file");

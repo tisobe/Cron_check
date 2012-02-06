@@ -7,3 +7,4 @@ source /home/mta/bin/reset_param
 setenv PFILES "${PDIRS}"
 
 perl /data/mta/MTA/bin/check_cron_job_error.perl 
+
