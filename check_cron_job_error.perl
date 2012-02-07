@@ -6,7 +6,7 @@
 #														#
 #		author: t. isobe (tisobe@cfa.harvard.edu)							#
 #														#
-#		last update: Feb 06, 2012									#
+#		last update: Feb 07, 2012									#
 #														#
 #################################################################################################################
 
@@ -22,10 +22,15 @@ $main_dir = '/data/mta/Script/Cron_check/';
 $tester = $ARGV[0];	#--- if tester is given, it is a test mode, and will run as a test mode.
 chomp $tester;
 
+$full_chk = $ARGV[1];	#---- if this is set > 0, the script check all logs regardless of when they were crated 
+			#---- otherwise, only logs created yesterday and today are examined
+
+chomp $full_chk;
+
 if($tester eq ''){
 	$tester = 'isobe@head.cfa.harvard.edu';
-#	$others = 'swolk@head.cfa.harvard.edu brad@head.cfa.harvard.edu';
-	$others = '';
+	$others = 'swolk@head.cfa.harvard.edu brad@head.cfa.harvard.edu';
+#	$others = '';
 
 	$test_mode = 0;
 }else{
@@ -89,7 +94,8 @@ if($chk == $nyear){
 	$base = 366;
 }
 
-$ntime = $nyear + $nyday/$base;			#--- time in a fractional year
+$nadd = $nyday + $nhour/24 + $nmin/1440;
+$ntime = $nyear + $nadd/$base;			#--- time in a fractional year
 
 #
 #--- set the path to Logs directory
@@ -220,7 +226,10 @@ for($i = 0; $i < $cnt; $i++){
 	if($chk == $uyear){
 		$base = 366;
 	}
-	$utime = $uyear + $uyday/$base;
+
+	@ctemp = split(/:/, $utime);
+	$tadd  = $uyday + $ctemp[0]/60 + $ctemp[1]/1440;
+	$utime = $uyear + $tadd/$base;
 	$diff  = 365 * ( $ntime - $utime);
 
 	$uchk  = 0;
@@ -331,29 +340,46 @@ for($i = 0; $i < $cnt; $i++){
 #
 #--- check the log has "error" message
 #
-		$input = `cat $log[$i]`;
 
-		if($input =~ /Error/ || $input =~ /Can/){
-	
-			print OUT2 "$cmd[$i]\n";
-	
-			@lines = split(/\n/, $input);
-			@error_save = ();
-			OUTER2:
-			foreach $ent (@lines){
-				if($ent =~ /Error/ || $ent =~ /Can/){
-					foreach $comp (@error_save){
-						if($ent =~ /$comp/){
-							next OUTER2;
-						}
-					}
-					push(@error_save, $ent);
-					print OUT2 "\t\t$ent\n\n";
-	
-				}
+#
+#--- only logs which updated yesterday and today will be checked, unless $full_chk > 0, then check all
+#
+
+		$rchk = 0;
+		if($full_chk > 0){
+			$rchk = 1;
+		}else{
+			$tdiff = $ntime - $utime;
+			if($tdiff < 0.002739726){
+				$rchk = 1;
 			}
-			close(FH);
-			$ecnt++;
+		}
+
+		if($rchk == 1){
+			$input = `cat $log[$i]`;
+
+			if($input =~ /Error/ || $input =~ /Can/){
+	
+				print OUT2 "$cmd[$i]\n";
+	
+				@lines = split(/\n/, $input);
+				@error_save = ();
+				OUTER2:
+				foreach $ent (@lines){
+					if($ent =~ /Error/ || $ent =~ /Can/){
+						foreach $comp (@error_save){
+							if($ent =~ /$comp/){
+								next OUTER2;
+							}
+						}
+						push(@error_save, $ent);
+						print OUT2 "\t\t$ent\n\n";
+		
+					}
+				}
+				close(FH);
+				$ecnt++;
+			}
 		}
 	}
 }
@@ -424,7 +450,7 @@ if($ecnt == 0 && $wcnt == 0){
 	}else{
 		system("mv $out_file    $main_dir/Error_logs/");
 		system("chmod 775       $main_dir/Error_logs/$out_file");
-		system("chgrp mtagroup  $main_dir/Cron_check/Error_logs/$out_file");
+		system("chgrp mtagroup  $main_dir/Error_logs/$out_file");
 	}
 }
 
