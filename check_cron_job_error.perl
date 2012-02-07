@@ -233,7 +233,7 @@ for($i = 0; $i < $cnt; $i++){
 	$diff  = 365 * ( $ntime - $utime);
 
 	$uchk  = 0;
-	if($diff > 1){
+	if($diff > 2){
 		if($wday[$i] =~ /\*/){
 			if($mday[$i] =~ /\*/){
 				if($month[$i] =~ /\*/){
