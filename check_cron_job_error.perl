@@ -6,7 +6,7 @@
 #														#
 #		author: t. isobe (tisobe@cfa.harvard.edu)							#
 #														#
-#		last update: Feb 07, 2012									#
+#		last update: Feb 08, 2012									#
 #														#
 #################################################################################################################
 
@@ -320,7 +320,7 @@ for($i = 0; $i < $cnt; $i++){
 #
 #---- for the case week day is set for cron job
 #
-			if($diff > 4){
+			if($diff > 7){
 				$uchk = 1;
 			}
 		}
