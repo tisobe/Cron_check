@@ -189,13 +189,13 @@ open(OUT2, ">$zerror");
 OUTER:
 for($i = 0; $i < $cnt; $i++){
 #
-#--- if the log is created with ">>" direction, ignore
+#--- if the log is created with ">>" direction, ignore (now, every logs are made with >> 05/28/12)
 #
-	if($mark[$i] > 0){
-		next OUTER;
-	}
+#	if($mark[$i] > 0){
+#		next OUTER;
+#	}
 #
-#--- find out when the last log is crated
+#--- find out when the last log is  updated
 #
 
 	$input = `ls -l $log[$i]`;
