@@ -6,7 +6,7 @@
 #															#
 #		t. isobe (isobe@cfa.harvard.edu)									#
 #															#
-#		last update: May 28, 2012										#
+#		last update: May 30, 2012										#
 #															#
 #########################################################################################################################
 
@@ -26,7 +26,7 @@ def backup_mta_logs():
 #--- check who is the user, and set a path to Log location
 #
     user = getpass.getuser()
-    user.strip()
+    user = user.strip()
     logdir = '/home/' + user + '/Logs/' 
     tmpdir = '/tmp/' + user + '/ztemp'
 
