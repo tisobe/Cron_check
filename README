@@ -3,17 +3,10 @@ Checking Error Status of Cron Jobs
 ####################################
 
 
-check_cron_job_wrap_script
---------------------------
-call check_cron_job_main_script in tsh environment
-
-check_cron_job_main_script
---------------------------
-set the environment and run check_cron_job_error.perl
-
-
-check_cron_job_error.perl
 -------------------------
+check_cron_job_error.py
+-------------------------
+
 This script reads cron job entries and check whether the cron jobs are running as it is supposed to be
 and, if it does, check whether there are any error messages. If it finds these problems, it creates
 a log and sends out email.
@@ -25,50 +18,75 @@ This script must be run on a specific machine with a specific user. Currently fo
 	mta on colossus
 	cus on rhodes
 
-
 Usage:
 ------
 With an appropriate user on an appropriate machine:
 
-	/data/mta/MTA/bin/check_cron_job_warap_script
+	/data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py
 
 Input:
 -----
 The script will read cron job lists and log files.
-Since it is too long and there will be a mixed message, if a log file is created with ">>", 
-that cron job is ignored from checking the error. 
 
 Output:
 -------
 email to $tester and other people listed.
 Logs under /data/mta/Script/Cron_check/Error_logs/
 Example:
-	-rwxrwxr-x   1 10139    mtagroup     357 Feb  6 09:47 cron_warning_cus_rhodes_2012037
-	-rwxrwxr-x   1 mta      mtagroup    1706 Feb  6 11:17 cron_warning_mta_rhodes_2012037
+	-rw-r--r-- 1 mta head   0 Jun  5 13:30 error_list_colossus_mta
+	-rw-r--r-- 1 cus head   0 Jun  5 13:44 error_list_rhodes_cus
+	-rw-r--r-- 1 mta head 726 Jun  5 14:06 error_list_rhodes_mta
 
-Format: cron_warning_<user>_<machine>_<year><ydate>
-
-If there is no error/warning, this log will not be created.
+These files are moved to archive forms in 1st of every Month, e.g. to: error_list_colossus_mta_6_2012
 
 
 Test Mode
 ---------
-If you run the script with an argument of email address, the script will run on a test mode.
-It will send out email notification to the email address and the file will be saved in
-/data/mta/Script/Cron_check/Test_out. The directory Test_out will be created, if it does not exist.
-Example:
+There is no test form
 
-perl /data/mta/MTA/bin/check_cron_job_error.perl  tisobe@cfa.harvard.edu
 
 
 Cron jobs
 ---------
 mta on colossus:
-0 5 * * * cd /data/mta/Script/Cron_check/Exc; /data/mta/MTA/bin/check_cron_job_wrap_script > $HOME/Logs/cron_check_mta_colossus 2>&1
+58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_colossus_mta 2>&1
 
 cus on rhodes:
-5 5 * * * cd /data/mta/Script/Cron_check/Exc; /data/mta/MTA/bin/check_cron_job_wrap_script > $HOME/Logs/cron_check_cus_rhodes 2>&1
+58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_rhodes_cus 2>&1
 
 mta on rhodes:
-10 5 * * * cd /data/mta/Script/Cron_check/Exc; /data/mta/MTA/bin/check_cron_job_wrap_script > $HOME/Logs/cron_check_cus_rhodes 2>&1
+58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_rhodes_mta 2>&1
 
+mta on r2d2:
+58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_r2d2_mta 2>&1
+
+
+
+-------------------
+backup_mta_logs.py
+------------------
+
+This script moves all cron job logs to archived directory (Past_logs) on the 1st of every month. 
+
+This script must be run with mta and cus accounts to back up all. 
+
+Usage
+-----
+/data/mta/Script/Cron_check/Cron_check/backup_mta_logs.py
+
+this will move /home/<user>/Logs/*.cron to /home/<user>/Logs/Past_logs/.
+Note if there are subdirectories, they are copied, too.
+
+Input:
+------
+the script will read from the disk.
+
+Output:
+-------
+email is sent out when the task is finished or failed.
+
+Cron jobs
+---------
+with mta or cus account:
+
+0 1 1 * * /data/mta/MTA/bin/backup_mta_logs.py >> $HOME/Logs/cron_backup.cron 2>&1

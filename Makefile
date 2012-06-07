@@ -5,7 +5,7 @@ TASK = Cron_check
 
 include /data/mta/MTA/include/Makefile.MTA
 
-BIN  =  check_cron_job_error.perl check_cron_job_main_script check_cron_job_wrap_script backup_mta_logs.py
+BIN  =  backup_mta_logs.py check_cron_job_error.py
 
 DOC  = README
 
