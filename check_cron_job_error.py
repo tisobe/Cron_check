@@ -7,7 +7,7 @@
 #                                                                                                                       #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                                                               #
 #                                                                                                                       #
-#               last update: Jun 7, 2012                                                                                #
+#               last update: Sep 24, 2012                                                                               #
 #                                                                                                                       #
 #########################################################################################################################
 
@@ -45,7 +45,7 @@ machine = machine.strip()
 #
 cpu_list     = ['rhodes', 'colossus', 'r2d2']
 usr_list     = ['mta', 'cus']
-cpu_usr_list = ['rhodes_mta', 'rhodes_cus', 'colossus_mta', 'r2d2_mta']
+cpu_usr_list = ['rhodes_mta', 'rhodes_cus', 'colossus_mta', 'r2d2_mta', 'r2d2_cus']
 
 #
 #--- error log directory
@@ -306,11 +306,13 @@ def find_error(file):
 
     error_list = []
     for ent in data:
-        m1  = re.search('Error', ent)
-        m2  = re.search('Can',   ent)
-        chk = 0
+        lent = ent.lower()
+        m1   = re.search('error', lent)
+        m2   = re.search('can',   lent)
+        m3   = re.search('not',   lent)
+        chk  = 0
 
-        if (m1 is not None) or (m2 is not None):
+        if (m1 is not None) or (m2 is not None) or (m3 is not None):
             for comp in error_list:
                 if ent == comp:
                     chk = 1

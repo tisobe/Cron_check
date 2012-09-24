@@ -17,6 +17,8 @@ This script must be run on a specific machine with a specific user. Currently fo
 	mta on rhodes
 	mta on colossus
 	cus on rhodes
+    mta on r2d2
+    cus on r2d2
 
 Usage:
 ------
@@ -59,6 +61,9 @@ mta on rhodes:
 
 mta on r2d2:
 58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_r2d2_mta 2>&1
+
+cus on r2d2:
+58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_r2d2_cus 2>&1
 
 
 
