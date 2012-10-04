@@ -7,7 +7,7 @@
 #                                                                                                                       #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                                                               #
 #                                                                                                                       #
-#               last update: Sep 24, 2012                                                                               #
+#               last update: oct 04, 2012                                                                               #
 #                                                                                                                       #
 #########################################################################################################################
 
@@ -308,17 +308,26 @@ def find_error(file):
     for ent in data:
         lent = ent.lower()
         m1   = re.search('error', lent)
-        m2   = re.search('can',   lent)
-        m3   = re.search('not',   lent)
+        m2   = re.search('cannot',   lent)
+        m3   = re.search('permission denied',  lent)
+        m4   = re.search('not found', lent)
+        m5   = re.search('failed', lent)
+        m6   = re.search('invalid', lent)
+
+        n1   = re.search('cleartool', lent)
+        n2   = re.search('file exists', lent)
+        n3   = re.search('cannot remove', lent)
+	n4   = re.search('\/usr\/bin\/du', lent)
         chk  = 0
 
-        if (m1 is not None) or (m2 is not None) or (m3 is not None):
-            for comp in error_list:
-                if ent == comp:
-                    chk = 1
+        if (m1 is not None) or (m2 is not None) or (m3 is not None) or (m4 is not None) or (m5 is not None) or (m6 is not None):
+            if (n1 is None) and (n2 is None) and (n3 is None) and (n4 is None):
+                for comp in error_list:
+                    if ent == comp:
+                        chk = 1
 
-            if chk == 0:
-                error_list.append(ent)
+                if chk == 0:
+                    error_list.append(ent)
 
     return error_list
 
