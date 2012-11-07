@@ -7,7 +7,7 @@
 #                                                                                                                       #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                                                               #
 #                                                                                                                       #
-#               last update: oct 04, 2012                                                                               #
+#               last update: Nov 06, 2012                                                                               #
 #                                                                                                                       #
 #########################################################################################################################
 
@@ -354,7 +354,7 @@ def extract_cron_file_name():
     cron_file_name = []
     for ent in data:
         m = re.search('Logs', ent)
-        if m is not None:
+        if m is not None and ent[0] != '#':
             atemp = re.split('Logs/', ent)
             btemp = re.split('2>&1',  atemp[1])
             cron  = btemp[0]
