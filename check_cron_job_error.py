@@ -7,7 +7,7 @@
 #                                                                                                                       #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                                                               #
 #                                                                                                                       #
-#               last update: Nov 06, 2012                                                                               #
+#               last update: Jan 08, 2013                                                                               #
 #                                                                                                                       #
 #########################################################################################################################
 
@@ -610,7 +610,7 @@ def update_main_html():
             if dyear == 2012 and dmonth < 6:                    #---- this is the year/month the script was started
                 break
 
-            if dyear <= year and dmonth <=  mon:
+            if (dyear < year) or (dyear == year  and dmonth <=  mon):
 
                 lmon = tcnv.changeMonthFormat(dmonth)           #--- convert month in digit to letters
 
