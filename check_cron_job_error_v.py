@@ -1,9 +1,10 @@
-#!/usr/local/bin/python2.6
+#!/usr/bin/env /usr/local/bin/python2.7
 
 #########################################################################################################################
 #                                                                                                                       #
 #       check_cron_job_error.py: find new error messages from cron log files for a given machine and a given user       #
 #                                                                                                                       #
+#           Linux CentOS 6 version                                                                                      #
 #                                                                                                                       #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                                                               #
 #                                                                                                                       #
@@ -43,9 +44,9 @@ machine = machine.strip()
 #
 #--- possible machine names and user name lists
 #
-cpu_list     = ['rhodes', 'colossus', 'r2d2', 'c3po-v']
+cpu_list     = ['rhodes', 'colossus', 'r2d2', 'c3po-v','colossus-v']
 usr_list     = ['mta', 'cus']
-cpu_usr_list = ['rhodes_mta', 'rhodes_cus', 'colossus_mta', 'r2d2_mta', 'r2d2_cus', 'c3po-v_mta', 'c3po-v_cus']
+cpu_usr_list = ['rhodes_mta', 'rhodes_cus', 'colossus_mta', 'r2d2_mta', 'r2d2_cus', 'c3po-v_mta', 'c3po-v_cus','colossus-v_mta']
 
 #
 #--- error log directory
@@ -72,8 +73,8 @@ tempout = tempdir + 'ztemp'                             #--- temporary file to p
 #
 
 admin = 'isobe@head.cfa.harvard.edu'
-email_list = 'isobe@head.cfa.harvard.edu,swolk@head.cfa.harvard.edu,brad@head.cfa.harvard.edu'
-#email_list = 'isobe@head.cfa.harvard.edu'
+####email_list = 'isobe@head.cfa.harvard.edu,swolk@head.cfa.harvard.edu,brad@head.cfa.harvard.edu'
+email_list = 'isobe@head.cfa.harvard.edu'
 
 #--------------------------------------------------------------------------------------------------------------------------
 #-- check_cron: find new error messages from cron log files for a given machine and a given user                        ---
