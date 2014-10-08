@@ -1,13 +1,13 @@
-#!/usr/bin/env /proj/sot/ska/bin/python
+#!/usr/bin/env /usr/local/bin/python2.6
 
 #############################################################################################################
 #                                                                                                           #
-#       find_cron_records.py:reads cron job file and find newly recorded error message of each job          #
-#                   this is CentOS version                                                                  #
+#     check_cron_records_linux.py:reads cron job file and find newly recorded error message of each job     #
+#                   this is Linux  version                                                                  #
 #                                                                                                           #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                                       #
 #                                                                                                           #
-#           Last Update: Mar 11, 2014                                                                       #
+#           Last Update: Feb 06, 2014                                                                       #
 #                                                                                                           #
 #############################################################################################################
 
@@ -39,6 +39,10 @@ for ent in data:
     line = atemp[0].strip()
     exec "%s = %s" %(var, line)
 #
+#--- for linux machines, we need an older python script
+#
+mta_dir = '/data/mta/Script/Python_script/'
+#
 #--- append  pathes to private folders to a python directory
 #
 sys.path.append(bin_dir)
@@ -61,9 +65,9 @@ machine = machine.strip()
 #
 #--- possible machine names and user name lists
 #
-cpu_list     = ['colossus-v', 'c3po-v', 'r2d2-v']
-usr_list     = ['mta', 'cus']
-cpu_usr_list = ['colossus-v_mta', 'r2d2-v_mta', 'r2d2-v_cus', 'c3po-v_mta', 'c3po-v_cus']
+cpu_list     = ['colossus', 'rhodes']
+usr_list     = ['mta']
+cpu_usr_list = ['colossus_mta', 'rhodes_mta']
 
 #
 #--- temp writing file name
@@ -89,7 +93,7 @@ def check_cron_records():
 #
 #--- setup a record file name depending on the user and the machine
 #
-    cfile = house_keeping  + 'Records/' + machine + '_' + user
+    cfile = house_keeping + 'Records/' + machine + '_' + user
 
     chk   = mcf.chkFile(cfile)
 #
@@ -135,7 +139,7 @@ def update_record_file(cfile, lname):
     Input:  cfile   --- output file name <house_keeping>/Records/<machine>_<user>
             lname   --- a list of cron jobs
     Output: cfile   --- an updated recorded file in <house_keeping>/Records/
-            cname   --- a list of the current file names
+            cname   --- a list of current file names
             ctime   --- a list of the last updated time of each cron job
             csize   --- a list of the current file length in line # of each cron record file
     """
@@ -201,16 +205,13 @@ def extract_cron_file_name():
     output: cron_file_name:   a list of cron file names (file names only no directory path)
     """
 
-    try:
-        cmd = 'crontab -l >' + zspace 
-        os.system(cmd)
-    
-        f    = open(zspace, 'r')
-        data = [line.strip() for line in f.readlines()]
-        f.close()
-        mcf.rm_file(zspace)
-    except:
-        exit(1)
+    cmd = 'crontab -l >' + zspace 
+    os.system(cmd)
+
+    f    = open(zspace, 'r')
+    data = [line.strip() for line in f.readlines()]
+    f.close()
+    mcf.rm_file(zspace)
 
     cron_file_name = []
     for ent in data:
@@ -359,19 +360,18 @@ def check_for_error(file, start=0):
 #
 #--- check the following parterns to identify the error messages in the file
 #
-        elist = ['error', 'cannot', 'permission denied', 'not found', 'failed', 'invalid' 'out of range']
+        elist = ['error', 'cannot', 'permission denied', 'not found', 'failed', 'invalid', 'out of range']
         elist = elist + ['undefined']
 #
 #---if the line contains following messages, they are not real error; so ignore
 #
         nlist = ['cleartool', 'file exists', 'cannot remove', '\/usr\/bin\/du']
-
+    
         chk = 0
         for test in elist:
             m = re.search(test, lent)
             if m is not None:
                 chk = 1
-                break
 
         if chk == 1:
             for test in nlist:
@@ -379,10 +379,10 @@ def check_for_error(file, start=0):
                 if m is  not None:
                     chk = 0
                     break
-
+    
         if chk > 0:
             error_list.append(ent)
-                
+
     error_list = list(set(error_list))
 
     if len(error_list) == 0:

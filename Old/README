@@ -1,0 +1,97 @@
+####################################
+Checking Error Status of Cron Jobs
+####################################
+
+
+-------------------------
+check_cron_job_error.py
+-------------------------
+
+This script reads cron job entries and check whether the cron jobs are running as it is supposed to be
+and, if it does, check whether there are any error messages. If it finds these problems, it creates
+a log and sends out email.
+
+
+This script must be run on a specific machine with a specific user. Currently following jobs are run:
+
+	mta on rhodes
+	mta on colossus
+	cus on rhodes
+    mta on r2d2
+    cus on r2d2
+
+Usage:
+------
+With an appropriate user on an appropriate machine:
+
+	/data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py
+
+Input:
+-----
+The script will read cron job lists and log files.
+
+Output:
+-------
+email to $tester and other people listed.
+Logs under /data/mta/Script/Cron_check/Error_logs/
+Example:
+	-rw-r--r-- 1 mta head   0 Jun  5 13:30 error_list_colossus_mta
+	-rw-r--r-- 1 cus head   0 Jun  5 13:44 error_list_rhodes_cus
+	-rw-r--r-- 1 mta head 726 Jun  5 14:06 error_list_rhodes_mta
+
+These files are moved to archive forms in 1st of every Month, e.g. to: error_list_colossus_mta_6_2012
+
+
+Test Mode
+---------
+There is no test form
+
+
+
+Cron jobs
+---------
+mta on colossus:
+58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_colossus_mta 2>&1
+
+cus on rhodes:
+58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_rhodes_cus 2>&1
+
+mta on rhodes:
+58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_rhodes_mta 2>&1
+
+mta on r2d2:
+58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_r2d2_mta 2>&1
+
+cus on r2d2:
+58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_r2d2_cus 2>&1
+
+
+
+-------------------
+backup_mta_logs.py
+------------------
+
+This script moves all cron job logs to archived directory (Past_logs) on the 1st of every month. 
+
+This script must be run with mta and cus accounts to back up all. 
+
+Usage
+-----
+/data/mta/Script/Cron_check/Cron_check/backup_mta_logs.py
+
+this will move /home/<user>/Logs/*.cron to /home/<user>/Logs/Past_logs/.
+Note if there are subdirectories, they are copied, too.
+
+Input:
+------
+the script will read from the disk.
+
+Output:
+-------
+email is sent out when the task is finished or failed.
+
+Cron jobs
+---------
+with mta or cus account:
+
+0 1 1 * * /data/mta/MTA/bin/backup_mta_logs.py >> $HOME/Logs/cron_backup.cron 2>&1

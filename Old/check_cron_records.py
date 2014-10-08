@@ -7,7 +7,7 @@
 #                                                                                                           #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                                       #
 #                                                                                                           #
-#           Last Update: Mar 11, 2014                                                                       #
+#           Last Update: Feb 06, 2014                                                                       #
 #                                                                                                           #
 #############################################################################################################
 
@@ -201,16 +201,13 @@ def extract_cron_file_name():
     output: cron_file_name:   a list of cron file names (file names only no directory path)
     """
 
-    try:
-        cmd = 'crontab -l >' + zspace 
-        os.system(cmd)
-    
-        f    = open(zspace, 'r')
-        data = [line.strip() for line in f.readlines()]
-        f.close()
-        mcf.rm_file(zspace)
-    except:
-        exit(1)
+    cmd = 'crontab -l >' + zspace 
+    os.system(cmd)
+
+    f    = open(zspace, 'r')
+    data = [line.strip() for line in f.readlines()]
+    f.close()
+    mcf.rm_file(zspace)
 
     cron_file_name = []
     for ent in data:

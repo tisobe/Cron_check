@@ -3,28 +3,18 @@ Checking Error Status of Cron Jobs
 ####################################
 
 
--------------------------
-check_cron_job_error.py
--------------------------
-
-This script reads cron job entries and check whether the cron jobs are running as it is supposed to be
+This set of scripts reads cron job entries and check whether the cron jobs are running as it is supposed to be
 and, if it does, check whether there are any error messages. If it finds these problems, it creates
 a log and sends out email.
 
 
 This script must be run on a specific machine with a specific user. Currently following jobs are run:
 
-	mta on rhodes
-	mta on colossus
-	cus on rhodes
-    mta on r2d2
-    cus on r2d2
-
-Usage:
-------
-With an appropriate user on an appropriate machine:
-
-	/data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py
+	mta on c3po-v
+	mta on r2d2-v
+	cus on c3po-v
+	cus on r2e2-v
+    mta on rhodes
 
 Input:
 -----
@@ -33,14 +23,23 @@ The script will read cron job lists and log files.
 Output:
 -------
 email to $tester and other people listed.
-Logs under /data/mta/Script/Cron_check/Error_logs/
+Logs under /data/mta/Script/Cron_check/house_keeping/Records/
 Example:
-	-rw-r--r-- 1 mta head   0 Jun  5 13:30 error_list_colossus_mta
-	-rw-r--r-- 1 cus head   0 Jun  5 13:44 error_list_rhodes_cus
-	-rw-r--r-- 1 mta head 726 Jun  5 14:06 error_list_rhodes_mta
+-rw-r--r-- 1 mta head     254 Sep 16 12:05 r2d2-v_mta_error_list
+-rw-r--r-- 1 mta head    2269 Sep 16 13:00 c3po-v_mta~
+-rw-r--r-- 1 cus head     212 Sep 16 13:05 c3po-v_cus~
+-rw-r--r-- 1 mta head    1105 Sep 16 13:05 rhodes_mta~
+-rw-r--r-- 1 cus head     265 Sep 16 13:05 r2d2-v_cus~
+-rw-r--r-- 1 mta head     258 Sep 16 13:05 r2d2-v_mta~
+-rw-r--r-- 1 mta head    2269 Sep 16 13:30 c3po-v_mta
+-rw-r--r-- 1 cus head     212 Sep 16 13:35 c3po-v_cus
+-rw-r--r-- 1 mta head    1105 Sep 16 13:35 rhodes_mta
+-rw-r--r-- 1 mta head 5114033 Sep 16 13:35 rhodes_mta_error_list
+-rw-r--r-- 1 cus head     265 Sep 16 13:35 r2d2-v_cus
+-rw-r--r-- 1 mta head     258 Sep 16 13:35 r2d2-v_mta
 
-These files are moved to archive forms in 1st of every Month, e.g. to: error_list_colossus_mta_6_2012
 
+These files are moved to <house_keeping>/Records/Past_errors/ in 1st of every Month.
 
 Test Mode
 ---------
@@ -50,48 +49,55 @@ There is no test form
 
 Cron jobs
 ---------
-mta on colossus:
-58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_colossus_mta 2>&1
+mta on c3po-v
+0,30 * * * * /data/mta/Script/Cron_check/Scripts/check_cron_records.py >> $HOME/Logs/new_cron_check_c3po_v_mta  2>&1
+mta on r2d2-v
 
-cus on rhodes:
-58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_rhodes_cus 2>&1
-
-mta on rhodes:
-58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_rhodes_mta 2>&1
-
-mta on r2d2:
-58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_r2d2_mta 2>&1
-
-cus on r2d2:
-58 23 * * * /data/mta/Script/Cron_check/Cron_check/check_cron_job_error.py >> $HOME/Logs/cron_check_r2d2_cus 2>&1
-
+5,35 * * * * /data/mta/Script/Cron_check/Scripts/check_cron_records.py >> $HOME/Logs/new_cron_check_r2d2_v_mta.cron 2>&1
+10 7 * * * /data/mta/Script/Cron_check/Scripts/send_error_list_email.py >> $HOME/Logs/new_cron_email_script.cron 2>&1
+1 0  1 * *  /data/mta/Script/Cron_check/Scripts/monthly_cleanup.py     >> $HOME/Logs/new_cron_email_clean_up_mta.cron 2>&1
+cus on c3po-v
+0,30 * * * * /data/mta/Script/Cron_check/Scripts/check_cron_records.py >> $HOME/Logs/new_cron_check_c3po_v_cus  2>&1
+cus on r2d2-v
+0,30 * * * * /data/mta/Script/Cron_check/Scripts/check_cron_records.py >> $HOME/Logs/new_cron_check_r2r2_v_cus  2>&1
+mta on rhodes
+0,30 * * * * /data/mta/Script/Cron_check/Scripts/check_cron_records.py >> $HOME/Logs/new_cron_check_rohodes_mta 2>&1
 
 
--------------------
-backup_mta_logs.py
-------------------
 
-This script moves all cron job logs to archived directory (Past_logs) on the 1st of every month. 
 
-This script must be run with mta and cus accounts to back up all. 
+--------------------
+find_cron_records.py
+--------------------
 
-Usage
------
-/data/mta/Script/Cron_check/Cron_check/backup_mta_logs.py
-
-this will move /home/<user>/Logs/*.cron to /home/<user>/Logs/Past_logs/.
-Note if there are subdirectories, they are copied, too.
+This script reads cron job file and find newly recorded error message of each job 
 
 Input:
 ------
-the script will read from the disk.
+/home/mta/Logs/*cron
+/home/cus/Logs/*cron
 
 Output:
 -------
-email is sent out when the task is finished or failed.
+/data/mta/Script/Cron_check/house_keeping/Records/<machine name>_<user>
 
-Cron jobs
----------
-with mta or cus account:
+------------------------
+send_error_list_email.py
+------------------------
 
-0 1 1 * * /data/mta/MTA/bin/backup_mta_logs.py >> $HOME/Logs/cron_backup.cron 2>&1
+This script reads the current error lists and send out email
+
+Input:
+------
+/data/mta/Script/Cron_check/house_keeping/Records/<machine name>_<user>
+
+Output:
+-------
+an error notification email
+
+------------------
+monthly_cleanup.py
+------------------
+
+This script moves the last months error logs to Past_logs directory
+
