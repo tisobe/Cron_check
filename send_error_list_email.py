@@ -6,7 +6,7 @@
 #                                                                                                           #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                                       #
 #                                                                                                           #
-#           Last Update: Feb 20, 2014                                                                       #
+#           Last Update: Jul 16, 2015                                                                       #
 #                                                                                                           #
 #############################################################################################################
 
@@ -60,7 +60,7 @@ machine = machine.strip()
 #
 #--- possible machine names and user name lists
 #
-cpu_list     = ['colossus','rhodes', 'c3po-v', 'r2d2-v']
+cpu_list     = ['colossus', 'colossus-v', 'rhodes', 'c3po-v', 'r2d2-v']
 usr_list     = ['mta', 'cus']
 cpu_usr_list = ['colossus_mta', 'rhodes', 'colossus-v_mta', 'r2d2-v_mta', 'r2d2-v_cus', 'c3po-v_mta', 'c3po-v_cus']
 #
