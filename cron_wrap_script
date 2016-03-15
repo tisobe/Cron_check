@@ -1,0 +1,1 @@
+TERM=dummy; export TERM; /bin/tcsh  < /data/mta/Script/Cron_check/Scripts/cron_main_script
